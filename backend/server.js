@@ -1,5 +1,6 @@
 const express = require('express'); // Import Express
 const mongoose = require('mongoose'); // Import Mongoose
+const cors = require('cors'); // Import CORS
 const User = require('./models/User'); // Import the User model
 require('dotenv').config(); // Load environment variables from .env
 const path = require('path'); // Import path module
@@ -9,10 +10,11 @@ const port = process.env.PORT || 5001; // Change to 5001 if you encounter confli
 
 // Middleware to parse JSON
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from the public directory
+app.use(cors()); // Enable CORS
+app.use(express.static(path.join(__dirname, '../RU/public'))); // Serve static files from the public directory
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html')); // Serve the index.html file
+  res.sendFile(path.join(__dirname, '../RU/index.html')); // Serve the index.html file
 });
 
 // MongoDB connection
