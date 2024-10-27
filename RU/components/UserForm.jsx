@@ -1,5 +1,5 @@
-// RU/src/UserForm.jsx
 import React, { useState } from 'react';
+
 
 const UserForm = () => {
   const [formData, setFormData] = useState({
@@ -8,17 +8,22 @@ const UserForm = () => {
     password: '',
     age: '',
     gender: '',
-    dorming: '',
+    isDorming: false, // Boolean field to match `User.js`
     dormCampus: '',
     major: '',
     ethnicity: '',
     hobbies: '',
   });
 
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value, // Use checked for checkbox (isDorming)
+    }));
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +33,7 @@ const UserForm = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
+
 
       if (response.ok) {
         const data = await response.json();
@@ -39,6 +45,7 @@ const UserForm = () => {
       console.error('Error:', error);
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -53,7 +60,15 @@ const UserForm = () => {
         <option value="non-binary">Non-binary</option>
         <option value="non-conforming">Non-conforming</option>
       </select>
-      <input type="text" name="dorming" placeholder="Are you dorming? (yes/no)" onChange={handleChange} required />
+
+
+      {/* Checkbox for isDorming to match Boolean field */}
+      <label>
+        Dorming:
+        <input type="checkbox" name="isDorming" checked={formData.isDorming} onChange={handleChange} />
+      </label>
+
+
       <input type="text" name="dormCampus" placeholder="Dorm Campus (optional)" onChange={handleChange} />
       <input type="text" name="major" placeholder="Major (optional)" onChange={handleChange} />
       <input type="text" name="ethnicity" placeholder="Ethnicity (optional)" onChange={handleChange} />
@@ -62,5 +77,6 @@ const UserForm = () => {
     </form>
   );
 };
+
 
 export default UserForm;
